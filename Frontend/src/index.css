@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: 'Inter', sans-serif;
+  --color-surface: #f8fafc; /* Replace this with your exact desired hex color for surface */
+}
+
+/* 3. Base modifications use standard CSS rules in v4 instead of @layer base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-surface); /* Uses your defined theme token */
+  color: #1B2B4B;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 4. Custom utilities use standard CSS syntax */
+.safe-area-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 8px);
+}
