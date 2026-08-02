@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
-import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap, UserKey ,User, ShieldCheck } from "lucide-react";
+import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap, UserKey ,User, ShieldCheck,Store } from "lucide-react";
 
 type Role = "cashier" | "admin" | "manager ";
 
@@ -12,6 +12,7 @@ export const SignUpPage = () => {
   const [email, setEmail]                   = useState("");
   const [password, setPassword]             = useState("");
   const [role, setRole]                     = useState<Role>("cashier");
+  const [storeId,setStoreId]                =  useState("");
   const [isLoading, setIsLoading]           = useState(false);
   const [focusedInput, setFocusedInput]     = useState<string | null>(null);
 
@@ -172,6 +173,28 @@ export const SignUpPage = () => {
                   {showPassword ? <EyeOff size={15} /> : <Eye size={15} />}
                 </button>
               </motion.div>
+
+              {/* Store selector */}
+              
+                <div>
+                <p className="text-xs text-white/40 mb-1.5 flex items-center gap-1">
+                  <Store size={12} /> Store 
+                </p>
+                </div>
+                <motion.div whileHover={{ scale: 1.01 }} className=" flex items-center mb-1.5 gap-1">
+                <UserKey size={12}/>
+              <select
+                  value={storeId}
+                  onChange={(e) => setStoreId(e.target.value)}
+                  onFocus={() => setFocusedInput("storeId")}
+                  onBlur={() => setFocusedInput(null)}
+                  className={`${inputBase} appearance-none cursor-pointer [&>option]:bg-[#1B2B4B] [&>option]:text-[#0EA5A0]`}
+                >
+                  <option value={1}>Luminous</option>
+                  <option value={2}>Jorisa</option>
+                  
+                </select>
+                </motion.div>
 
               {/* Role selector */}
               

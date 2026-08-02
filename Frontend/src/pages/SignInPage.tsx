@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap } from "lucide-react";
+import { useAuthStore } from "@/stores/authstore";
 
 export const SignInPage = () => {
   const navigate = useNavigate();
@@ -9,7 +10,9 @@ export const SignInPage = () => {
   const [email, setEmail]                 = useState("");
   const [password, setPassword]           = useState("");
   const [isLoading, setIsLoading]         = useState(false);
+  const [errorMsg,setErrorMsg]            = useState("")
   const [focusedInput, setFocusedInput]   = useState<string | null>(null);
+  const {setUser,setToken}                = useAuthStore()
 
   // 3D card tilt
   const mouseX   = useMotionValue(0);
@@ -24,11 +27,39 @@ export const SignInPage = () => {
   };
   const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0); };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg('')
     setIsLoading(true);
-    // TODO: replace with real auth call
-    setTimeout(() => { setIsLoading(false); navigate("/"); }, 2000);
+    
+    try {
+      const response = await fetch('http://localhost:8000/signin', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.detail || 'Login failed')
+      }
+
+      // Save Token and User payload to browser storage
+      localStorage.setItem('JORISA_TOKEN', data.access_token)
+      localStorage.setItem('JORISA_USER', JSON.stringify(data.user))
+
+      // Update Zustand global state immediately
+      setToken(data.access_token)
+      setUser(data.user)
+
+      // Redirect to dashboard
+      navigate('/')
+    } catch (err: any) {
+      setErrorMsg(err.message)
+    } finally {
+      setIsLoading(false)
+    }
   };
 
   return (

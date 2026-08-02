@@ -13,6 +13,7 @@ class User(base):
     name=Column(String,nullable=False)
     email=Column(String,nullable=False)
     role=Column(String,nullable=False)
+    hashed_password=Column(String,nullable=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
 
 
@@ -124,7 +125,7 @@ class Transaction(base):
     created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
 
     transaction_items=relationship(
-        "TransactionItems",
+        "TransactionItem",
         backref="transaction"
     )
 
