@@ -17,7 +17,7 @@ def getCurrentUser(currentUser:models.User = Depends(getCurrentUser)):
         "name": currentUser.name,
         "email": currentUser.email,
         "role": currentUser.role,
-        "store_id": currentUser.store_id
+        "storeId": currentUser.store_id
     }
 
 #Get all users

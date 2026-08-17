@@ -28,8 +28,8 @@ export interface AuthState{
     setLoading : (loading) => set({loading}),
     setToken: (token) => set({token}),
     logout:()=>{
-        localStorage.removeItem("Jorisa_token")
-        localStorage.removeItem("Jorisa_user")
+        localStorage.removeItem("JORISA_TOKEN")
+        localStorage.removeItem("JORISA_USER")
         set({user:null,token:null,loading:false})
     },
 }))

@@ -89,12 +89,10 @@ class Item(base):
     name=Column(String,nullable=False)
     category_id=Column(Integer,ForeignKey("categories.id"),nullable=False)
     store_keeping_unit=Column(String,nullable=False) #barcode read
-    unit_cost=Column(Float,nullable=False)  # Original Price bought
-    unit_price=Column(Float,nullable=False) # Original Price to be sold
     img_path=Column(String,nullable=False)
     reorder_level=Column(Integer,nullable=False,default="10")   # Any quantity below this raises alarm 
     created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
-    updated_at=Column(DateTime(timezone=True),server_onupdate=func.now(),nullable=False)
+    updated_at=Column(DateTime(timezone=True),server_default=func.now(),onupdate=func.now(),nullable=False)
 
     stock=relationship(
         "InventoryStock",
@@ -111,8 +109,10 @@ class InventoryStock(base):
     id=Column(Integer,primary_key=True,index=True)
     item_id=Column(Integer,ForeignKey("items.id"),nullable=False)
     store_id=Column(Integer,ForeignKey("stores.id"),nullable=False)
-    quantity=Column(Integer,nullable=False,default="0")
-    updated_at=Column(DateTime(timezone=True),server_onupdate=func.now(),nullable=False)
+    quantity=Column(Integer,nullable=False,default=0)
+    unit_cost=Column(Float,nullable=False)  # Original Price bought
+    unit_price=Column(Float,nullable=False) # Original Price to be sold
+    updated_at=Column(DateTime(timezone=True),server_default=func.now(),onupdate=func.now(),nullable=False)
 
 class Transaction(base):
     __tablename__="transactions"

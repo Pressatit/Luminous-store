@@ -23,4 +23,6 @@ dist-ssr
 *.sln
 *.sw?
 img
+Backend/.env
+Frontend/.env.local
 

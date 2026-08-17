@@ -1,13 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { LogOut,Zap } from "lucide-react";
 import { NAV_ITEMS } from "@/config/nav";
+import { useAuthStore } from "@/stores/authstore";
 
 interface SidebarProps{
     userName : string;
     userRole : string;
 }
 
-export const Sidebar =({userName, userRole}: SidebarProps ) =>{
+export const Sidebar =() =>{
+
+    const user =useAuthStore((s)=>s.user);
+    const userName =user?.name
+    const userRole=user?.role
+
 
     return(
         <aside className="hidden md:flex flex-col w-64 h-screen bg-[#1B2B4B] text-white fixed left-0 top-0 z-40">
@@ -53,7 +59,7 @@ export const Sidebar =({userName, userRole}: SidebarProps ) =>{
             <div className="flex items-center gap-3 mb-3">
                 <div className="w-8 h-8 rounded-full bg-[#0EA5A0]/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-[#0EA5A0] text-xs font-bold uppercase">
-                        {userName.charAt(0)}
+                        {user?.name.charAt(0)}
                     </span>
                 </div>
                 <div className="min-w-0">

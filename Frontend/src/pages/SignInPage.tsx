@@ -3,8 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap } from "lucide-react";
 import { useAuthStore } from "@/stores/authstore";
+import { toast } from "sonner";
+
 
 export const SignInPage = () => {
+
+  const Backend=import.meta.env.VITE_BACKEND_URL || "http://localhost:8000"
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword]   = useState(false);
   const [email, setEmail]                 = useState("");
@@ -33,7 +38,7 @@ export const SignInPage = () => {
     setIsLoading(true);
     
     try {
-      const response = await fetch('http://localhost:8000/signin', {
+      const response = await fetch(`${Backend}/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
@@ -42,19 +47,34 @@ export const SignInPage = () => {
       const data = await response.json()
 
       if (!response.ok) {
+
+        const errorMessage = typeof data.detail === 'string' ? data.detail : 'Sign in Failed';
+
+        toast.error(errorMessage);
+
         throw new Error(data.detail || 'Login failed')
       }
 
+      const userPayload = {
+         id: data.user.id,
+         name: data.user.name,
+         email: data.user.email,
+         role: data.user.role,
+         storeId: data.user.storeId }
+
       // Save Token and User payload to browser storage
       localStorage.setItem('JORISA_TOKEN', data.access_token)
-      localStorage.setItem('JORISA_USER', JSON.stringify(data.user))
+      localStorage.setItem('JORISA_USER', JSON.stringify(userPayload))
 
       // Update Zustand global state immediately
       setToken(data.access_token)
-      setUser(data.user)
+      setUser(userPayload)
+
 
       // Redirect to dashboard
       navigate('/')
+      toast.success("Logged in successfully")
+
     } catch (err: any) {
       setErrorMsg(err.message)
     } finally {

@@ -1,17 +1,20 @@
 import { NAV_ITEMS } from "@/config/nav";
 import { Link, useLocation } from "react-router-dom";
 import { Bell } from "lucide-react";
+import { useAuthStore } from "@/stores/authstore";
 
-interface PageHeaderProps{
-    userName:string;
-    userRole:string;
-}
 
-export const PageHeader = ({userName ,userRole}: PageHeaderProps) =>{
+
+export const PageHeader = () =>{
    const {pathname} =useLocation();
    const current= NAV_ITEMS.find((n) =>
     pathname==="/" ? n.path ==="/" : n.path !=="/" && pathname.startsWith(n.path)
     );
+   const user = useAuthStore((s)=>(s.user));
+   const userName=user?.name
+   const userRole=user?.role
+
+   
 
     return(
         <header className="hidden md:flex items-center justify-between px-8 py-5 bg-white border-b border-gray-100">
@@ -37,7 +40,7 @@ export const PageHeader = ({userName ,userRole}: PageHeaderProps) =>{
           <div className="w-9 h-9 rounded-full bg-[#1B2B4B] flex items-center justify-center">
             
             <span className="text-white text-xs font-bold uppercase">
-              {userName.charAt(0)}
+              {user?.name.charAt(0)}
             </span>
            
           </div>

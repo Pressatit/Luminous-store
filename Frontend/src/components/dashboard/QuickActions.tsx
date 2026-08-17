@@ -5,7 +5,7 @@ const ACTIONS = [
   { label: "Add items",       icon: PackagePlus,  path: "/receive"   },
   { label: "Checkout items",  icon: PackageMinus, path: "/dispatch"  },
   { label: "Register item",   icon: ScanBarcode,  path: "/register"  },
-  { label: "Store catalogue", icon: LayoutGrid,   path: "/inventory" },
+  { label: "Store Inventory", icon: LayoutGrid,   path: "/inventory" },
   { label: "Report",          icon: BarChart2,    path: "/report"    },
 ];
 

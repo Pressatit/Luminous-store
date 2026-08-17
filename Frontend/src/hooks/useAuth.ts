@@ -7,8 +7,8 @@ export function useAuth(){
 
     useEffect(()=>{
         async function initAuth() {
-            const savedToken=localStorage.getItem("Jorisa_token")
-            const savedUser=localStorage.getItem("Jorisa_user")
+            const savedToken=localStorage.getItem("JORISA_TOKEN")
+            const savedUser=localStorage.getItem("JORISA_USER")
 
             if (!savedToken && !savedUser){
                 logout()

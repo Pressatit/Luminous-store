@@ -1,13 +1,14 @@
 import { NAV_ITEMS } from "@/config/nav";
 import { useLocation , Link} from "react-router-dom";
 import {Bell} from "lucide-react"
+import { useAuthStore } from "@/stores/authstore";
 
-interface TopBarProps{
-    userName: string;
-}
 
-export const TopBar =({ userName }: TopBarProps)=> {
+
+export const TopBar =()=> {
     const { pathname } =useLocation();
+    const user= useAuthStore((s)=>(s.user))
+
     const current =NAV_ITEMS.find((n)=>
         pathname === "/" ? n.path === "/" : n.path !== "/" && pathname.startsWith(n.path)
     );
@@ -35,7 +36,7 @@ export const TopBar =({ userName }: TopBarProps)=> {
                     <Link to="/profile" className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-gray-100">
                     <div className="w-9 h-9 rounded-full bg-[#1B2B4B] flex items-center justify-center">
                         <span className="text-white text-xs font-bold uppercase">
-                            {userName.charAt(0)}
+                            {user?.name.charAt(0)}
                         </span>
                     </div>
                     </Link>

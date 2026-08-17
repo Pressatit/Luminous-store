@@ -23,11 +23,11 @@ def signIn(payload:schemas.Signinrequest,db:Session=Depends(get_db)):
         "access_token":accessToken,
         "token_type":"bearer",
         "user":{
-            "userId":user.id,
-            "userName":user.name,
+            "id":user.id,
+            "name":user.name,
             "storeId":user.store_id,
-            "userEmail":user.email,
-            "userRole":user.role
+            "email":user.email,
+            "role":user.role
         }
     }
 
@@ -57,6 +57,15 @@ def signUp(payload:schemas.Signuprequest,db:Session = Depends(get_db)):
      db.commit()
      db.refresh(new_user)
 
-     return new_user
+     accessToken=security.createAccessToken(data={"sub":str(new_user.id),"role":new_user.role,"store_id":new_user.store_id})
+
+
+     return {
+         "access_token":accessToken,
+         "token_type":"bearer",
+         "user":new_user
+             
+         }
+    
 
 

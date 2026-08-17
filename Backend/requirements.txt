@@ -6,3 +6,5 @@ psycopg2
 pyjwt[crypto]
 passlib[bcrypt] # This should be version 4.3.0 pip install bcrypt=4.3.0
 pydantic[email]
+supabase
+python-multipart

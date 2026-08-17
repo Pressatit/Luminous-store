@@ -13,6 +13,7 @@ import { QuickActions }  from "../components/dashboard/QuickActions";
 import type { DashboardSummary, StockAlert, ActivityItem } from "../types/dashboard";
 import { mockSummary, mockAlerts, mockActivity } from "../mock/dashboardMock";
 
+
 const formatKsh = (n: number) => "Ksh " + n.toLocaleString("en-KE");
 
 const getLiveTime = () =>

@@ -2,19 +2,27 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-motion";
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap, UserKey ,User, ShieldCheck,Store } from "lucide-react";
+import { useAuthStore } from "@/stores/authstore";
+import { toast } from "sonner";
+
 
 type Role = "cashier" | "admin" | "manager ";
 
 export const SignUpPage = () => {
+  const Backend =import.meta.env.VITE_BACKEND_URL
+
   const navigate = useNavigate();
   const [showPassword, setShowPassword]     = useState(false);
   const [name, setName]                     = useState("");
   const [email, setEmail]                   = useState("");
   const [password, setPassword]             = useState("");
   const [role, setRole]                     = useState<Role>("cashier");
-  const [storeId,setStoreId]                =  useState("");
+  const [storeId,setStoreId]                =  useState<number>(1);
   const [isLoading, setIsLoading]           = useState(false);
   const [focusedInput, setFocusedInput]     = useState<string | null>(null);
+  const {setToken,setUser}                  = useAuthStore();
+  const [errorMsg,setErrorMsg]              = useState("");              
+  
 
   // 3D card tilt
   const mouseX  = useMotionValue(0);
@@ -29,11 +37,52 @@ export const SignUpPage = () => {
   };
   const handleMouseLeave = () => { mouseX.set(0); mouseY.set(0); };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const  handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // TODO: replace with real registration call → POST /auth/register
-    setTimeout(() => { setIsLoading(false); navigate("/"); }, 2000);
+
+   try {
+      const response = await fetch(`${Backend}/signup`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email:email, password:password, storeId:Number(storeId) , name:name , role:role }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+
+       const errorMessage = typeof data.detail === 'string' ? data.detail : 'Account creation failed';
+
+       toast.error(errorMessage);
+
+        throw new Error(data.detail)
+        
+      }
+     
+       const userPayload = {
+         id: data.user.id,
+         name: data.user.name,
+         email: data.user.email,
+         role: data.user.role,
+         storeId: data.user.storeId }
+
+      // Save Token and User payload to browser storage
+      localStorage.setItem('JORISA_TOKEN', data.access_token)
+      localStorage.setItem('JORISA_USER', JSON.stringify(userPayload))
+
+      // Update Zustand global state immediately
+      setToken(data.access_token)
+      setUser(userPayload)
+
+      navigate('/')
+      toast.success("Logged in successfully")
+
+    } catch (err: any) {
+      setErrorMsg(err.message)
+    } finally {
+      setIsLoading(false)
+    }
   };
 
   const inputBase =
@@ -185,7 +234,7 @@ export const SignUpPage = () => {
                 <UserKey size={12}/>
               <select
                   value={storeId}
-                  onChange={(e) => setStoreId(e.target.value)}
+                  onChange={(e) => setStoreId(Number(e.target.value))}
                   onFocus={() => setFocusedInput("storeId")}
                   onBlur={() => setFocusedInput(null)}
                   className={`${inputBase} appearance-none cursor-pointer [&>option]:bg-[#1B2B4B] [&>option]:text-[#0EA5A0]`}
