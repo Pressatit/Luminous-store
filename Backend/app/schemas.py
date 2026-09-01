@@ -36,7 +36,11 @@ class Showcategories(BaseModel):
 class Showitems(BaseModel):
     id:int
     name:str
+    category_id:int
     store_keeping_unit:str
+    img_path:str
+    reorder_level:int
+    
 
 class ReceiveStock(BaseModel):
     item_id: int
@@ -48,5 +52,18 @@ class ReceiveStock(BaseModel):
 class ReceiveStockBatch(BaseModel):
     total_amount:float
     items:List[ReceiveStock]
+
+class DispatchStock(BaseModel):
+    item_id: int
+    quantity: int
+    selling_price: float
+    reason: str
+    
+
+class DispatchStockBatch(BaseModel):
+    total_amount:float
+    items:List[DispatchStock]
+
+
 
 

@@ -32,3 +32,9 @@ def getCategories(db:Session=Depends(get_db)):
     categories=db.query(models.Category).all()
 
     return categories
+
+@router.get("/categories/count")
+def getCategoriesCount(db:Session=Depends(get_db)):
+    categories=db.query(models.Category).all()
+
+    return len(categories)

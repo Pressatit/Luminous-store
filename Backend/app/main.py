@@ -3,7 +3,8 @@ from fastapi import FastAPI,Depends
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 import models
-from routers import auth,users,categories,items,stock
+from routers import auth,users,categories,items,stock,report
+from routers import dashboard
 
 from sqlalchemy import text
 
@@ -30,6 +31,9 @@ app.include_router(users.router)
 app.include_router(categories.router)
 app.include_router(items.router)
 app.include_router(stock.router)
+app.include_router(report.router)
+app.include_router(dashboard.router)
+
 
 @app.get("/health")
 def check_health(

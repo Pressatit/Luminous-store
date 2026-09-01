@@ -139,4 +139,5 @@ class TransactionItem(base):
     buying_price=Column(Float,nullable=False)
     selling_price=Column(Float,nullable=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+    reason = Column(String, nullable=True) 
 
