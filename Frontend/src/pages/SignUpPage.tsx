@@ -9,7 +9,9 @@ import { toast } from "sonner";
 type Role = "cashier" | "admin" | "manager ";
 
 export const SignUpPage = () => {
-  const Backend =import.meta.env.VITE_BACKEND_URL
+
+  const Backend=import.meta.env.VITE_BACKEND_URL || "http://localhost:8000"
+
 
   const navigate = useNavigate();
   const [showPassword, setShowPassword]     = useState(false);

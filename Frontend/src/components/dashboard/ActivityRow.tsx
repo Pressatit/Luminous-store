@@ -10,7 +10,7 @@ const formatTime = (iso: string) => {
 };
 
 export const ActivityRow = ({ item }: ActivityRowProps) => {
-  const isIn = item.transactionType === "receive";
+  const isIn = item.transaction_type === "Receive stock";
 
   return (
     <div className="flex items-center gap-3 py-2">
@@ -24,9 +24,9 @@ export const ActivityRow = ({ item }: ActivityRowProps) => {
 
       {/* Item info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-semibold text-[#1B2B4B] truncate">{item.itemName}</p>
+        <p className="text-sm font-semibold text-[#1B2B4B] truncate">{item.item_name}</p>
         <p className="text-xs text-gray-400">
-          {isIn ? "Received" : "Dispatched"} · {item.servedBy} · {formatTime(item.createdAt)}
+          {isIn ? "Received" : "Dispatched"} · {item.served_by} · {formatTime(item.created_at)}
         </p>
       </div>
 

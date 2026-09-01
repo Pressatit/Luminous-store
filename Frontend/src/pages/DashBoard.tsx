@@ -1,20 +1,40 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
-  Package, AlertTriangle, ArrowLeftRight,
+   AlertTriangle, ArrowLeftRight,
   LayoutGrid, User, Zap,
 } from "lucide-react";
+
+import { toast } from "sonner";
+
+import { type DateRange } from "../components/report/DatePicker";
 
 import { StatCard }      from "../components/dashboard/StatCard";
 import { StockAlertRow } from "../components/dashboard/StockAlertRow";
 import { ActivityRow }   from "../components/dashboard/ActivityRow";
 import { QuickActions }  from "../components/dashboard/QuickActions";
+import { useAuthStore } from "@/stores/authstore";
+
+
+const Backend = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+
 
 import type { DashboardSummary, StockAlert, ActivityItem } from "../types/dashboard";
-import { mockSummary, mockAlerts, mockActivity } from "../mock/dashboardMock";
+
+const today = () => {
+  const d = new Date();
+  return d.toISOString().split("T")[0];
+};
+
+const yesterday = () => {
+  const d = new Date();
+  d.setDate(d.getDate() - 1);
+  return d.toISOString().split("T")[0];
+};
 
 
 const formatKsh = (n: number) => "Ksh " + n.toLocaleString("en-KE");
+
 
 const getLiveTime = () =>
   new Date().toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" });
@@ -26,21 +46,135 @@ const getLiveDate = () =>
 
 export const DashBoard = () => {
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
 
-  // TODO: swap mock for real API calls when backend ready
-  const summary: DashboardSummary = mockSummary;
-  const alerts: StockAlert[]      = mockAlerts;
-  const activity: ActivityItem[]  = mockActivity;
+  const isCashier=user?.role =='cashier'
+
+
+ const [activities, setActivities] =useState<ActivityItem[]>([])
+ const [stock,setStock]            =useState<StockAlert[]>([]);
+ const [isloading,setisloading]    =useState(true);
+ const [error,setError]            =useState("")
+ const [categorycount,setCategorycount]= useState<number>(0)
+
+
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: yesterday(),
+    to:   today(),
+  });
+
+  useEffect(()=>{
+
+    setisloading(true)
+
+   const token  = localStorage.getItem("JORISA_TOKEN");
+   const fetchActivities=async () =>{
+    
+    try{
+      const res=await fetch(`${Backend}/dashboard/activity?date_from=${dateRange.from}&date_to=${dateRange.to}`,{
+        headers: {
+            "Authorization":            `Bearer ${token}`,
+            "Content-Type":             "application/json",
+            "ngrok-skip-browser-warning": "true",
+          },
+      });
+      if (!res.ok) throw new Error("Failed to load activity");
+
+      const data:ActivityItem[]= await res.json();
+      setActivities(data)
+      
+    }
+    catch(err){
+        console.error(err);
+        setError("Could not load activity. Check your connection.");
+        toast.error(error)
+
+    }
+  }
+
+  const fetchStockAlert = async()=>{
+    try{
+    const res = await fetch(`${Backend}/dashboard/stock-alert`,{
+      headers:{
+        "Authorization": `Bearer ${token}`,
+        "Content-type": "application/json",
+        "ngrok-skip-browser-warning": "true"
+
+      },
+    })
+
+    if (!res.ok) throw new Error("Failed to load stock Levels");
+
+    const data:StockAlert[]= await res.json();
+    setStock(data)
+  }
+  catch(err){
+    setError("Could not load activity. Check your connection.");
+    toast.error(error)
+  }
+  }
+  const fetchCategories =async ()=>{
+    try{
+      const res = await fetch(`${Backend}/categories/count`,{
+        headers:{
+          "Authorization": `Bearer ${token}`,
+          "Content-type": "application/json",
+          "ngrok-skip-browser-warning": "true"
+        }
+      });
+      if (!res.ok) throw new Error("Failed to load stock Levels");
+
+      const data=await res.json()
+
+      setCategorycount(data)
+
+    }
+    catch(err){
+      setError("Could not load activity. Check your connection.");
+      toast.error(error)
+
+    }
+  }
+  const loadAllData = async () => {
+      setisloading(true);
+      setError("");
+      
+      
+      await Promise.all([
+        fetchStockAlert(),
+        fetchActivities(),
+        fetchCategories()
+      ]);
+      
+      setisloading(false);
+    };
+
+    loadAllData();
+},[])
+
+ const Summary: DashboardSummary = {
+  lowStockCount: stock.length,
+  todayTransactions: { total: activities.length, 
+    in:activities.filter(a => a.transaction_type === 'Receive stock').length, 
+    out: activities.filter(a => a.transaction_type === 'Dispatch Items').length },
+  totalCategories: categorycount,
+  activeCashier: isCashier? user.name : '----',
+};
+
+  
+  const summary: DashboardSummary = Summary;
+  const alerts: StockAlert[]      = stock;
+  const activity: ActivityItem[]  = activities;
 
   const [time, setTime] = useState(getLiveTime());
+
   useEffect(() => {
     const id = setInterval(() => setTime(getLiveTime()), 60_000);
     return () => clearInterval(id);
   }, []);
 
   const statGrid = (cols: string) => (
-    <div className={`grid ${cols} gap-3`}>
-      <StatCard icon={Package}        value={formatKsh(summary.stockValue)}       label="Stock value"          bgClass="bg-[#4CAF7D]" textClass="text-white" iconBgClass="bg-white/20" />
+    <div className={`grid ${cols} gap-7`}>
       <StatCard icon={AlertTriangle}  value={summary.lowStockCount}               label="Low stock alert"      bgClass="bg-[#C8A84B]" textClass="text-white" iconBgClass="bg-white/20" />
       <StatCard icon={ArrowLeftRight} value={summary.todayTransactions.total}     label="Today's transactions" bgClass="bg-[#4FC3D4]" textClass="text-white" iconBgClass="bg-white/20"
         subLabel={`IN: ${summary.todayTransactions.in}  ·  OUT: ${summary.todayTransactions.out}`} />
@@ -128,7 +262,7 @@ export const DashBoard = () => {
 
         <div className="mb-6">
           <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-3">Overview</p>
-          {statGrid("grid-cols-4")}
+          {statGrid("grid-cols-3")}
         </div>
 
         <div className="grid grid-cols-2 gap-6 mb-6">

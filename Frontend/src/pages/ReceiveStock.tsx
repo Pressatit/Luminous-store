@@ -96,7 +96,7 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
         const results = await searchItems(value);
         setSearchResults(results);
         setIsSearching(false);
-      }, 300);
+      }, 200);
     };
   
     // ── Select from dropdown ──────────────────────────────────

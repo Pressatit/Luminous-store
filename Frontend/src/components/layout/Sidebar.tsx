@@ -13,6 +13,7 @@ export const Sidebar =() =>{
     const user =useAuthStore((s)=>s.user);
     const userName =user?.name
     const userRole=user?.role
+    const logout =useAuthStore((s)=>s.logout);
 
 
     return(
@@ -67,7 +68,7 @@ export const Sidebar =() =>{
                     <p className="text-xs text-white/40 capitalize"> {userRole}</p>
                 </div>
             </div>
-            <button className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-white/50 hover:text-white hover:bg-white/5 transition-all" >
+            <button onClick={logout} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-white/50 hover:text-white hover:bg-white/5 transition-all" >
             <LogOut size={14}> </LogOut> Sign Out
             </button>
         </div>

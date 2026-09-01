@@ -40,7 +40,7 @@ export const AppShell = () => {
               <Outlet />
             </div>
           ) : (
-            <div className="w-full max-w-5xl px-4 py-4 md:px-8 md:py-6 md:mx-0">
+            <div className="w-full px-4 py-4 md:px-8 md:py-6 md:mx-0">
               <Outlet />
             </div>
           )}

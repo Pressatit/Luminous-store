@@ -5,7 +5,7 @@ interface StockAlertRowProps {
 }
 
 export const StockAlertRow = ({ alert }: StockAlertRowProps) => {
-  const isCritical = alert.quantityAvailable <= Math.floor(alert.lowStockThreshold * 0.3);
+  const isCritical = alert.quantity <= Math.floor(alert.low_stock_threshold * 0.3);
 
   return (
     <div
@@ -13,7 +13,7 @@ export const StockAlertRow = ({ alert }: StockAlertRowProps) => {
         border-l-4 ${isCritical ? "border-red-500" : "border-amber-400"}`}
     >
       <div>
-        <p className="text-sm font-semibold text-[#1B2B4B]">{alert.itemName}</p>
+        <p className="text-sm font-semibold text-[#1B2B4B]">{alert.item_name}</p>
         <p className="text-xs text-gray-500">{alert.category}</p>
       </div>
       <span
@@ -23,7 +23,7 @@ export const StockAlertRow = ({ alert }: StockAlertRowProps) => {
             : "bg-amber-400 text-amber-900"
           }`}
       >
-        {alert.quantityAvailable} left
+        {alert.quantity} left
       </span>
     </div>
   );

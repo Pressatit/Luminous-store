@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { ReactBarcode } from "react-jsbarcode";
 import {  Upload, Camera, Download, Printer,CheckCircle, ToggleLeft, ToggleRight,} from "lucide-react";
 import { toast } from "sonner";
+import imageCompression from "browser-image-compression";
 
 
 
@@ -13,7 +14,6 @@ const generateBarcodeValue = (categoryId: string) => {
   const rand   = Math.floor(Math.random() * 999).toString().padStart(3, "0");
   return `JRS${prefix}${ts}${rand}`;
 };
-
 
 
 export const RegisterItem = () => {
@@ -144,8 +144,17 @@ interface Category {
     formData.append("is_bin_item", String(isBinItem));
     
     if (imageFile) {
-      formData.append("image", imageFile);
+
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+      const compressedImage= await imageCompression(imageFile,options)
+
+      formData.append("image", compressedImage,imageFile.name);
     }
+
 
     const response = await fetch(`${Backend}/item`, {
       method: "POST",

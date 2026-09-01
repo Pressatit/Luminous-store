@@ -2,10 +2,11 @@ import { BrowserRouter ,Route ,Routes } from "react-router-dom";
 import { AppShell } from "@/components/layout/AppShell";
 import { DashBoard } from "./pages/DashBoard.tsx";
 import { ReceiveStockPage } from "@/pages/ReceiveStock";
-import { DispatchItems} from "@/pages/DispatchItems";
+import { DispatchPage } from "@/pages/DispatchItems";
 import { InventoryPage } from "@/pages/InventoryPage";
 import { RegisterItem } from "@/pages/RegisterItem";
 import { ReportPage } from "@/pages/ReportPage";
+import { AddIndividualDispatchPage } from "./pages/DispatchIndividualItems";
 import { ProfilePage } from "@/pages/ProfilePage";
 import { AddIndividualItemPage } from "./pages/AddIndividualItems.tsx";
 
@@ -48,7 +49,8 @@ export const App = () => {
         <Route index                 element={<DashBoard/>}/>
         <Route path ="/receive"      element={<ReceiveStockPage/>}/>
         <Route path="/receive/add"   element={<AddIndividualItemPage/>}/>
-        <Route path ="/dispatch"     element={<DispatchItems/>}/>
+        <Route path ="/dispatch"     element={<DispatchPage/>}/>
+        <Route path="dispatch/add"   element={<AddIndividualDispatchPage />} />
         <Route path="/inventory"     element={<InventoryPage/>}/>
         <Route path="/register"      element={<RegisterItem/>}/>
         <Route path="/report"        element={<ReportPage/>}/>

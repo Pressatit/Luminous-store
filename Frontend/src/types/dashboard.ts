@@ -12,17 +12,17 @@ export interface DashboardSummary {
 
 export interface StockAlert {
   id: string;
-  itemName: string;
+  item_name: string;
   category: string;
-  quantityAvailable: number;
-  lowStockThreshold: number;
+  quantity: number;
+  low_stock_threshold: number;
 }
 
 export interface ActivityItem {
   id: string;
-  itemName: string;
-  transactionType: "receive" | "dispatch";
+  item_name: string;
+  transaction_type: string;
   quantity: number;
-  servedBy: string;
-  createdAt: string;
+  served_by: string;
+  created_at: string;
 }
