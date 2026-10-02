@@ -17,8 +17,16 @@ const yesterday = () => {
   return d.toISOString().split("T")[0];
 };
 
+
+
 // ── Transaction type badge ────────────────────────────────────
-const TrTypeBadge = ({ type }: { type: string }) => {
+const TrTypeBadge = (
+  {type,
+  reason
+}:{
+type:string,
+reason?:string }
+) => {
   const isReceive  = type.toLowerCase().includes("receive");
   const isDispatch = type.toLowerCase().includes("dispatch") || type.toLowerCase().includes("sale");
 
@@ -29,7 +37,10 @@ const TrTypeBadge = ({ type }: { type: string }) => {
       :              "bg-gray-100 text-gray-500"}`}
     >
       {isReceive  ? <ArrowDown size={10} /> : isDispatch ? <ArrowUp size={10} /> : <Minus size={10} />}
-      {type}
+      {isReceive && 
+      <p>{type}</p>}
+      {isDispatch &&
+      <p>{reason}</p>}
     </span>
   );
 };
@@ -45,6 +56,11 @@ export const ReportPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [fetched,   setFetched]   = useState(false); // true after first fetch
   const [error,     setError]     = useState<string | null>(null);
+
+  const formatTime = (iso: string) => {
+  const date = new Date(iso);
+  return date.toLocaleTimeString("en-KE", { hour: "2-digit", minute: "2-digit" });
+};
 
   // ── Fetch report ──────────────────────────────────────────
   const fetchReport = useCallback(async () => {
@@ -194,9 +210,10 @@ export const ReportPage = () => {
                     <div className="flex items-start justify-between">
                       <div>
                         <p className="text-sm font-bold text-[#1B2B4B]">{row.item_name}</p>
-                        <p className="text-xs text-gray-400">{row.served_by} · {row.date} {row.time}</p>
+                        
+                        <p className="text-xs text-gray-400">{row.served_by} · {row.date} {formatTime(row.created_at)}</p>
                       </div>
-                      <TrTypeBadge type={row.transaction_type} />
+                      <TrTypeBadge type={row.transaction_type} reason={row.reason}/>
                     </div>
                     <div className="flex items-center justify-between">
                       <span className="text-xs text-gray-400">Qty: <span className="font-semibold text-[#1B2B4B]">{row.quantity}</span></span>
@@ -212,7 +229,7 @@ export const ReportPage = () => {
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="border-b border-gray-100 bg-gray-50/60">
-                        {["Id","Item name","Quantity","Served by","Date","Time","Type","Total"].map((h) => (
+                        {["Item name","Quantity","Served by","Date","Time","Type","Total"].map((h) => (
                           <th key={h} className="text-left py-3 px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider whitespace-nowrap">
                             {h}
                           </th>
@@ -222,13 +239,12 @@ export const ReportPage = () => {
                     <tbody className="divide-y divide-gray-50">
                       {rows.map((row) => (
                         <tr key={row.id} className="hover:bg-gray-50/50 transition-colors">
-                          <td className="py-3 px-4 text-gray-400 text-xs">{row.id}</td>
                           <td className="py-3 px-4 font-medium text-[#1B2B4B] whitespace-nowrap">{row.item_name}</td>
                           <td className="py-3 px-4 text-center font-semibold text-[#1B2B4B]">{row.quantity}</td>
                           <td className="py-3 px-4 text-gray-600 whitespace-nowrap">{row.served_by}</td>
                           <td className="py-3 px-4 text-gray-400 whitespace-nowrap">{row.date}</td>
-                          <td className="py-3 px-4 text-gray-400">{row.time}</td>
-                          <td className="py-3 px-4"><TrTypeBadge type={row.transaction_type} /></td>
+                          <td className="py-3 px-4 text-gray-400">{formatTime(row.created_at)}</td>
+                          <td className="py-3 px-4"><TrTypeBadge type={row.transaction_type} reason={row.reason} /></td>
                           <td className="py-3 px-4 font-bold text-[#1B2B4B] whitespace-nowrap">Ksh {row.total_amount.toLocaleString()}</td>
                         </tr>
                       ))}

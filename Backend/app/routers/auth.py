@@ -19,6 +19,8 @@ def signIn(payload:schemas.Signinrequest,db:Session=Depends(get_db)):
         )
     accessToken=security.createAccessToken(data={"sub":str(user.id),"role":user.role,"store_id":user.store_id})
 
+    store = db.query(models.Store).filter(models.Store.id == user.store_id).first()
+
     return {
         "access_token":accessToken,
         "token_type":"bearer",
@@ -27,7 +29,8 @@ def signIn(payload:schemas.Signinrequest,db:Session=Depends(get_db)):
             "name":user.name,
             "storeId":user.store_id,
             "email":user.email,
-            "role":user.role
+            "role":user.role,
+            "storeName":store.store_name,
         }
     }
 

@@ -24,6 +24,7 @@ async def getReport(date_from:date=Query(...,description='start date'),date_to:d
                models.Transaction.transaction_type,
                models.Transaction.created_at,
                models.Transaction.total_amount,
+               models.TransactionItem.reason,
           )
           
           .join(models.Transaction,models.TransactionItem.transaction_id==models.Transaction.id )
@@ -51,6 +52,8 @@ async def getReport(date_from:date=Query(...,description='start date'),date_to:d
                "date":row.created_at.strftime("%d %b %Y"),
                "transaction_type":row.transaction_type,
                "total_amount":row.total_amount,
+               "reason":row.reason,
+               "created_at":row.created_at
             
 
           }

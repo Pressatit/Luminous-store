@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/authstore";
-import { User, Mail, Shield, UserMinus, UserPlus, BookOpen, FileSpreadsheet, LogOut } from "lucide-react";
+import { User, Store, Mail, Shield, UserMinus, UserPlus, BookOpen, FileSpreadsheet, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
 
@@ -48,6 +48,14 @@ export const ProfilePage = () => {
               <p className="text-sm text-[#1B2B4B]">
                 <span className="font-semibold">Role: </span>
                 <span className="font-bold capitalize text-[#1B2B4B]">{user?.role || "Cashier"}</span>
+              </p>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <Store className="w-4 h-4 text-[#0EA5A0]" />
+              <p className="text-sm text-[#1B2B4B]">
+                <span className="font-semibold">Store : </span>
+                {user?.storeName || "N/A"}
               </p>
             </div>
           </div>

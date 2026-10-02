@@ -60,11 +60,13 @@ export const SignInPage = () => {
          name: data.user.name,
          email: data.user.email,
          role: data.user.role,
-         storeId: data.user.storeId }
+         storeId: data.user.storeId,
+         storeName:data.user.storeName }
 
       // Save Token and User payload to browser storage
       localStorage.setItem('JORISA_TOKEN', data.access_token)
       localStorage.setItem('JORISA_USER', JSON.stringify(userPayload))
+      localStorage.setItem('STORE_NAME',userPayload.storeName)
 
       // Update Zustand global state immediately
       setToken(data.access_token)
@@ -249,10 +251,7 @@ export const SignInPage = () => {
 
               {/* Sign up link */}
               <p className="text-center text-xs text-white/40 pt-1">
-                Don't have an account?{" "}
-                <Link to="/signup" className="text-[#0EA5A0] hover:text-white font-medium transition-colors">
-                  Sign up
-                </Link>
+                Don't have an account?{" "} Contact the Manager for account creation
               </p>
             </form>
           </div>

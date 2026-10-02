@@ -266,20 +266,6 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
             />
 
         <div>
-            <label className={label}>Unit Price (Ksh)</label>
-           <input
-             type="number"
-             placeholder="0.00"
-             value={unitPrice}
-             onChange={(e) => setUnitPrice(e.target.value)}
-             disabled={!selectedItem}
-             min="0"
-             className={`${inputCls} ${!selectedItem ? "bg-gray-50 text-gray-300 cursor-not-allowed" : ""}`}
-           />
-          </div>
-        </div>
-
-        <div>
           <label className={label}>Quantity to add</label>
           <input
             type="number"
@@ -290,6 +276,22 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
             min="1"
             className={`${inputCls} ${!selectedItem ? "bg-gray-50 text-gray-300 cursor-not-allowed" : ""}`}
           />
+            
+          </div>
+        </div>
+
+        <div>
+          <label className={label}>Unit Price (Ksh)</label>
+           <input
+             type="number"
+             placeholder="0.00"
+             value={unitPrice}
+             onChange={(e) => setUnitPrice(e.target.value)}
+             disabled={!selectedItem}
+             min="0"
+             className={`${inputCls} ${!selectedItem ? "bg-gray-50 text-gray-300 cursor-not-allowed" : ""}`}
+           />
+          
         </div>
         </div>
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {
    AlertTriangle, ArrowLeftRight,
-  LayoutGrid, User, Zap,
+  LayoutGrid, User, Zap,Bell
 } from "lucide-react";
 
 import { toast } from "sonner";
@@ -205,7 +205,7 @@ export const DashBoard = () => {
               <Zap size={14} className="text-white" />
             </div>
             <div>
-              <p className="text-xs font-bold text-[#1B2B4B] leading-none">Jorisa</p>
+              <p className="text-xs font-bold text-[#1B2B4B] leading-none">{user?.storeName}</p>
               <p className="text-[9px] text-gray-400 uppercase tracking-widest">Electrical & Hardware</p>
             </div>
           </div>
@@ -250,13 +250,21 @@ export const DashBoard = () => {
       {/* ── DESKTOP ── */}
       <div className="hidden md:block w-full">
 
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-7">
           <div>
             <p className="text-xs text-gray-400 uppercase tracking-widest">{getLiveDate()}</p>
             <p className="text-gray-500 text-sm mt-0.5">
               Active cashier: <span className="font-semibold text-[#1B2B4B]">{summary.activeCashier}</span>
             </p>
           </div>
+
+          
+          <button className="relative w-9 h-9 rounded-full bg-gray-50 ">
+                       <Bell size={16} className="text-gray-500" />
+                       {/* Notification dot to be replaced later with real data */}
+                       <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#F59E0B] border-2 border-white"/>
+                    </button>
+          
           <p className="text-2xl font-bold text-[#1B2B4B]">{time}</p>
         </div>
 

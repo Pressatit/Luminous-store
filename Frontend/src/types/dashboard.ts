@@ -1,5 +1,5 @@
 export interface DashboardSummary {
-  stockValue: number;
+ 
   lowStockCount: number;
   todayTransactions: {
     total: number;

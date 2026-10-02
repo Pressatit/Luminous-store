@@ -7,4 +7,5 @@ export interface ReportRow {
   date:             string;
   transaction_type: string;
   total_amount:     number;
+  reason?:          string;
 }

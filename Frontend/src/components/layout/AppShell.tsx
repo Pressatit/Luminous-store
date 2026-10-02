@@ -20,12 +20,12 @@ export const AppShell = () => {
 
       <Sidebar userName={MOCK_USER.name} userRole={MOCK_USER.role} />
 
-      {!hideTopBar && <TopBar userName={MOCK_USER.name} />}
+      {!hideTopBar && <TopBar />}
 
       <div className="md:ml-64 flex flex-col min-h-screen">
 
         {!isDashboard && (
-          <PageHeader userName={MOCK_USER.name} userRole={MOCK_USER.role} />
+          <PageHeader  />
         )}
 
         <main

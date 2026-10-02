@@ -6,6 +6,7 @@ export interface userProfile{
     email:string,
     role: "admin" | "cashier" | "manager",
     storeId:number,
+    storeName:string,
 
 }
 

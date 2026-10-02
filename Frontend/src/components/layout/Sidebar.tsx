@@ -1,18 +1,18 @@
-import { NavLink } from "react-router-dom";
+import { NavLink ,Link } from "react-router-dom";
 import { LogOut,Zap } from "lucide-react";
 import { NAV_ITEMS } from "@/config/nav";
 import { useAuthStore } from "@/stores/authstore";
 
 interface SidebarProps{
-    userName : string;
-    userRole : string;
+    userName : string | undefined;
+    userRole : string | undefined;
 }
 
-export const Sidebar =() =>{
+export const Sidebar =({userName,userRole}:SidebarProps) =>{
 
     const user =useAuthStore((s)=>s.user);
-    const userName =user?.name
-    const userRole=user?.role
+    userName =user?.name
+    userRole=user?.role
     const logout =useAuthStore((s)=>s.logout);
 
 
@@ -24,7 +24,7 @@ export const Sidebar =() =>{
             <Zap size={16} className="text-white" />
             </div>
             <div className="min-w-0">
-                <p className="text-sm font-bold leading-tight text-white truncate">Luminous</p>
+                <p className="text-sm font-bold leading-tight text-white truncate">{user?.storeName}</p>
                 <p className="text-[10px] text-white/50 uppercase tracking-widest">Electrical & Hardware</p>
             </div>
          </div>
@@ -57,6 +57,7 @@ export const Sidebar =() =>{
          
         {/* Footer */}
         <div className="px-4 py-4 border-t border-white/10">
+        <Link to={"/profile"} className="flex items-center gap-2 px-3 py-1.5 rounded-lg hover:bg-white-100">
             <div className="flex items-center gap-3 mb-3">
                 <div className="w-8 h-8 rounded-full bg-[#0EA5A0]/20 flex items-center justify-center flex-shrink-0">
                     <span className="text-[#0EA5A0] text-xs font-bold uppercase">
@@ -68,6 +69,8 @@ export const Sidebar =() =>{
                     <p className="text-xs text-white/40 capitalize"> {userRole}</p>
                 </div>
             </div>
+            </Link>
+
             <button onClick={logout} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-xs text-white/50 hover:text-white hover:bg-white/5 transition-all" >
             <LogOut size={14}> </LogOut> Sign Out
             </button>
@@ -75,3 +78,4 @@ export const Sidebar =() =>{
         </aside>
     );
 };
+

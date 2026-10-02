@@ -22,7 +22,7 @@ export const TopBar =()=> {
                 </div>
                 <div className="text-center">
                      <p className="text-[15px] text-black-500 uppercase tracking-widest font-semibold">
-                        Luminous Electrical & Hardware
+                        {user?.storeName} Electrical & Hardware
                      </p>
 
                 </div>

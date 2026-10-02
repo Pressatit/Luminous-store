@@ -32,7 +32,7 @@ async def createItem(name: str = Form(...),category_id: int = Form(...),barcode:
         file_bytes = await image.read()
 
         # Upload file bytes to 'item-images' bucket
-        storage_res = supabase.storage.from_("luminous_items").upload(
+        storage_res = supabase.storage.from_("luminous_bucket").upload(
             path=file_name,
             file=file_bytes,
             file_options={"content-type": image.content_type}
@@ -40,7 +40,7 @@ async def createItem(name: str = Form(...),category_id: int = Form(...),barcode:
         
 
         # Retrieve public URL
-        img_path = supabase.storage.from_("luminous_items").get_public_url(file_name)
+        img_path = supabase.storage.from_("luminous_bucket").get_public_url(file_name)
         now =datetime.now(timezone.utc)
 
 

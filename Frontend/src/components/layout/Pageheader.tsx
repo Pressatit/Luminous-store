@@ -26,7 +26,7 @@ export const PageHeader = () =>{
             </div>
             <div className="text-center">
                 <p className="text-l text-black-400 uppercase tracking-widest font-semibold mb-0.5">
-                    Luminous Electrical & Hardware 
+                    {user?.storeName} Electrical & Hardware 
                 </p>
             </div>
             <div className="flex items-center justify-end gap-2">
