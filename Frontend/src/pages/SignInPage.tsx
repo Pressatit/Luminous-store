@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useMotionValue, useTransform } from "framer-mo
 import { Mail, Lock, Eye, EyeOff, ArrowRight, Zap } from "lucide-react";
 import { useAuthStore } from "@/stores/authstore";
 import { toast } from "sonner";
+import { getDeviceToken } from "@/lib/utils/device";
 
 
 export const SignInPage = () => {
@@ -36,12 +37,15 @@ export const SignInPage = () => {
     e.preventDefault();
     setErrorMsg('')
     setIsLoading(true);
-    
+
+    const token=getDeviceToken();
+  
+
     try {
       const response = await fetch(`${Backend}/signin`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email,password,token}),
       })
 
       const data = await response.json()
@@ -71,6 +75,8 @@ export const SignInPage = () => {
       // Update Zustand global state immediately
       setToken(data.access_token)
       setUser(userPayload)
+
+
 
 
       // Redirect to dashboard

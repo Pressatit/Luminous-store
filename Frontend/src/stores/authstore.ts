@@ -31,6 +31,7 @@ export interface AuthState{
     logout:()=>{
         localStorage.removeItem("JORISA_TOKEN")
         localStorage.removeItem("JORISA_USER")
+        localStorage.removeItem("STORE_NAME")
         set({user:null,token:null,loading:false})
     },
 }))

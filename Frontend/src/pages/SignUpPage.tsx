@@ -67,7 +67,9 @@ export const SignUpPage = () => {
          name: data.user.name,
          email: data.user.email,
          role: data.user.role,
-         storeId: data.user.storeId }
+         storeId: data.user.storeId,
+         storeName:data.store_name
+       }
 
       // Save Token and User payload to browser storage
       localStorage.setItem('JORISA_TOKEN', data.access_token)

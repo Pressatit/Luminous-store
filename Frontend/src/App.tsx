@@ -16,8 +16,14 @@ import { SignUpPage } from "@/pages/SignUpPage.tsx";
 import { RequireAuth } from "@/components/auth/RequireAuth.tsx"
 import { useAuth } from "./hooks/useAuth.ts";
 import { useAuthStore } from "./stores/authstore.ts";
+import { useEffect } from "react";
 
 import { Toaster } from "sonner";
+
+import { initDevice } from "./lib/utils/device.ts";
+
+
+
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const loading = useAuthStore((s) => s.loading);
@@ -32,7 +38,14 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   return <>{children}</>
 }
 
+
+
 export const App = () => {
+
+  useEffect(()=>{
+  initDevice();
+},[])
+
  return(
   <BrowserRouter>
   <AuthProvider>

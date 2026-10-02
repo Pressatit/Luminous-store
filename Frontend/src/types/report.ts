@@ -8,4 +8,5 @@ export interface ReportRow {
   transaction_type: string;
   total_amount:     number;
   reason?:          string;
+  created_at:       string;
 }

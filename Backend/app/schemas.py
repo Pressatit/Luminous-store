@@ -4,6 +4,7 @@ from typing import List
 class Signinrequest(BaseModel):
     email: EmailStr
     password:str
+    token:str
 
 class Signuprequest(BaseModel):
     name:str 

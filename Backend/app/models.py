@@ -1,9 +1,9 @@
 import uuid
-from sqlalchemy import Column,Integer,String,Float,ForeignKey,DateTime
+from sqlalchemy import Column,Integer,String,Float,ForeignKey,DateTime,Boolean
 from sqlalchemy.sql import func
 from sqlalchemy.orm import relationship
 from database import base
-from sqlalchemy.dialects.postgresql import JSONB, UUID
+from sqlalchemy.dialects.postgresql import JSONB, UUID,BOOLEAN
 
 class User(base):
     __tablename__="users"
@@ -55,6 +55,14 @@ class Store(base):
         "Transaction",
         backref="store"
     )
+    devices=relationship(
+        "Device",
+        backref="store"
+    )
+    notifications=relationship(
+        "Notification",
+        backref="store"
+    )
 
 
 class Shift(base):
@@ -64,9 +72,33 @@ class Shift(base):
     store_id=Column(Integer,ForeignKey("stores.id"),nullable=False)
     cashier_id=Column(UUID(as_uuid=True),ForeignKey("users.id"),nullable=False)
     status=Column(String,nullable=False,default="Active")
+    opening_balance=Column(Float,nullable=False)
+    closing_balance=Column(Float,nullable=False)
     opened_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
     ended_at=Column(DateTime(timezone=True),server_onupdate=func.now(),nullable=False)
 
+
+class Device(base):
+    __tablename__="devices"
+
+    id=Column(Integer,primary_key=True,index=True)
+    device_token=Column(String)
+    store_id=Column(Integer,ForeignKey("stores.id"))
+    label=Column(String)
+    is_Active=Column(Boolean)
+    created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+
+
+class Notification(base):
+    __tablename__="notifications"
+
+    id=Column(Integer,primary_key=True,index=True)
+    store_id=Column(Integer,ForeignKey("stores.id"))
+    message=Column(String)
+    is_read=Column(Boolean)
+    created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
+
+  
     
 
 class Category(base):
@@ -140,4 +172,5 @@ class TransactionItem(base):
     selling_price=Column(Float,nullable=False)
     created_at=Column(DateTime(timezone=True),server_default=func.now(),nullable=False)
     reason = Column(String, nullable=True) 
+
 
