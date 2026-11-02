@@ -2,8 +2,8 @@ fastapi
 uvicorn
 sqlalchemy
 dotenv
-psycopg2-binary==2.9.9
-psycopg[binary]==3.1.18
+psycopg2-binary
+psycopg[binary]
 pyjwt[crypto]
 passlib[bcrypt] # This should be version 4.3.0 pip install bcrypt=4.3.0
 pydantic[email]
