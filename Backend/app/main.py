@@ -15,11 +15,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
+origins=["https://luminous-store-gw0p8f3hn-pressatits-projects.vercel.app",
+         "https://luminous-store-khaki.vercel.app",
+         "http://localhost:5173",
+         "http://localhost:5174"]
+
 # Enable CORS so your React frontend can communicate with this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], # In production, replace with your React app's URL
-    allow_credentials=False,
+    allow_origins=[origins], # In production, replace with your React app's URL
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
