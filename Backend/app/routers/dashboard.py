@@ -78,7 +78,6 @@ async def getStock(db:Session=Depends(get_db),currentUser:models.User=Depends(se
                   "quantity":row.total_quantity,
                   "low_stock_threshold":10
 
-                  
            }
            for row in rows
     ]

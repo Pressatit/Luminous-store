@@ -25,6 +25,10 @@ async def getReport(date_from:date=Query(...,description='start date'),date_to:d
                models.Transaction.created_at,
                models.Transaction.total_amount,
                models.TransactionItem.reason,
+               models.TransactionItem.quantity,
+               models.TransactionItem.selling_price,
+               models.TransactionItem.buying_price,
+               models.Transaction.transaction_type
           )
           
           .join(models.Transaction,models.TransactionItem.transaction_id==models.Transaction.id )
@@ -42,6 +46,10 @@ async def getReport(date_from:date=Query(...,description='start date'),date_to:d
           .all()
 
           )
+
+     
+          
+          
      return [
           {
                "id":row.id,
@@ -51,7 +59,7 @@ async def getReport(date_from:date=Query(...,description='start date'),date_to:d
                "time":row.created_at.strftime("%H:%M"),
                "date":row.created_at.strftime("%d %b %Y"),
                "transaction_type":row.transaction_type,
-               "total_amount":row.total_amount,
+               "total_amount":(row.quantity*row.buying_price)if row.transaction_type == "Receive stock" else(row.quantity*row.selling_price),
                "reason":row.reason,
                "created_at":row.created_at
             

@@ -408,27 +408,35 @@ export  const ReceiveStockPage = () => {
 
   // Pick up item returned from mobile sub-page
   useEffect(() => {
-    if (location.state?.newItem && processedStateRef.current !== location.state.newItem) {
+    const incomingItem:CartItem =location.state?.newItem
+    const restoredCart:CartItem []= location.state?.existingCart
+
+    if (incomingItem && processedStateRef.current !== incomingItem) {
       processedStateRef.current = location.state.newItem;
-      const incoming: CartItem = location.state.newItem;
-      const baseCart: CartItem[] = location.state.existingCart || [];
+      
+      const baseCart: CartItem[] = restoredCart ?? cart;
 
       setCart(() => {
         // If same barcode already in cart, increase qty instead of duplicating
-        const exists = baseCart.find((i) => i.id === incoming.id);
+        const exists = baseCart.find((i) => i.id === incomingItem.id);
         if (exists) {
           return baseCart.map((i) =>
-            i.id === incoming.id
-              ? { ...i, quantity: i.quantity + incoming.quantity,
-                 total: (i.quantity + incoming.quantity) * i.unitCost }
+            i.id === incomingItem.id
+              ? { ...i, quantity: i.quantity + incomingItem.quantity,
+                 total: (i.quantity + incomingItem.quantity) * i.unitCost }
               : i
           );
         }
-        return [...baseCart, incoming];
+        return [...baseCart, incomingItem];
       });
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state,navigate,location.pathname]);
+    else if (!incomingItem && restoredCart && restoredCart.length > 0) {
+      // Back button pressed — just restore the cart
+      setCart(restoredCart);
+      navigate(location.pathname, { replace: true, state: {} });
+  }}, 
+  [location.state,navigate,location.pathname]);
 
   const addItem      = (item: CartItem) => {
     setCart((prev) => {

@@ -24,7 +24,6 @@ import { initDevice } from "./lib/utils/device.ts";
 
 
 
-
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const loading = useAuthStore((s) => s.loading);
   useAuth() 
@@ -57,8 +56,15 @@ export const App = () => {
         <Route path="/signup" element={<SignUpPage/>}/>
     
      {/*Protected routes*/}
+     
      <Route element={<RequireAuth/>}>
-      <Route path="/" element={<AppShell/>}>
+    
+      <Route path="/"
+       element={ 
+          
+           <AppShell/>
+        }
+        >
         <Route index                 element={<DashBoard/>}/>
         <Route path ="/receive"      element={<ReceiveStockPage/>}/>
         <Route path="/receive/add"   element={<AddIndividualItemPage/>}/>
@@ -70,6 +76,7 @@ export const App = () => {
         <Route path="/profile"       element={<ProfilePage/> }/>
       </Route>
      </Route>
+     
 
      {/*<Route path="*" element={<NotFoundPage />} />*/}
 

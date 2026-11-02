@@ -2,6 +2,9 @@ import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "@/stores/authstore";
 import { User, Store, Mail, Shield, UserMinus, UserPlus, BookOpen, FileSpreadsheet, LogOut } from "lucide-react";
 import { toast } from "sonner";
+import { ShiftCard } from "../components/shift/shiftCard";
+import { motion } from "framer-motion";
+
 
 
 export const ProfilePage = () => {
@@ -16,6 +19,8 @@ export const ProfilePage = () => {
   };
 
   const isAdminOrManager = user?.role === "admin" || user?.role === "manager";
+  const isCashier = user?.role === "cashier";
+  const storeName=localStorage.getItem("STORE_NAME")
 
   return (
     <div className="max-w-2xl mx-auto py-8 px-4 sm:px-6">
@@ -55,7 +60,7 @@ export const ProfilePage = () => {
               <Store className="w-4 h-4 text-[#0EA5A0]" />
               <p className="text-sm text-[#1B2B4B]">
                 <span className="font-semibold">Store : </span>
-                {user?.storeName || "N/A"}
+                {storeName || "N/A"}
               </p>
             </div>
           </div>
@@ -100,6 +105,16 @@ export const ProfilePage = () => {
             </div>
           </div>
         )}
+
+        {isCashier && (
+  <motion.div
+    initial={{ opacity: 0, y: 12 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ delay: 0.15 }}
+  >
+    <ShiftCard />
+  </motion.div>
+)}
 
         {/* Logout Button */}
         <div className="flex justify-end pt-4">

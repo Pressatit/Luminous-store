@@ -11,17 +11,29 @@ async def get_active_shift(
     db: Session = Depends(get_db), 
     current_user: models.User = Depends(security.getCurrentUser)
 ):
-    shift = db.query(models.Shift).filter(
-        models.Shift.cashier_id == current_user.id,
-        models.Shift.status == "Active"
-    ).first()
+    if current_user.role in ["admin", "manager"]:
+        shift = db.query(models.Shift).filter(
+            models.Shift.store_id == current_user.store_id,
+            models.Shift.status == "Active"
+        ).first()
+
+    else:
+        shift = db.query(models.Shift).filter(
+            models.Shift.cashier_id == current_user.id,
+            models.Shift.status == "Active"
+        ).first()
     
     if not shift:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, 
-            detail="No active shift found. Please open the till."
-        )
-    return shift
+        return None
+
+    cashier = db.query(models.User).filter(models.User.id == shift.cashier_id).first()
+
+    return {
+        "shift_id":shift.id,
+        "status":shift.status,
+        "opened_at":shift.opened_at.isoformat(),
+        "opening_balance":shift.opening_balance,
+        "cashier_name":cashier.name    }
 
 @router.post("/open")
 async def open_shift(
@@ -61,11 +73,18 @@ async def open_shift(
     
     db.commit()
     db.refresh(new_shift)
-    return {"message": "Shift started successfully", "shift_id": new_shift.id}
+    return {"message": "Shift started successfully", 
+            "shift_id": new_shift.id,
+            "status": new_shift.status,
+            "opening_balance":new_shift.opening_balance,
+            "opened_at":new_shift.opened_at.isoformat(),
+            "cashier_name":current_user.name,
+            "store_name":store.store_name
+         }
 
 @router.post("/close")
 async def close_shift(
-    closing_balance: float, 
+    #closing_balance: float, 
     db: Session = Depends(get_db), 
     current_user: models.User = Depends(security.getCurrentUser)
 ):
@@ -82,14 +101,18 @@ async def close_shift(
         
     shift.status = "Closed"
     shift.ended_at = datetime.utcnow()
-    shift.closing_balance = closing_balance
+    #shift.closing_balance = closing_balance
     
     # Notification for closure
     notification = models.Notification(
         store_id=current_user.store_id,
-        message=f"Till closed by {current_user.name}. Declared closing balance: Ksh {closing_balance}"
+        message=f"Till closed by {current_user.name}."
     )
     db.add(notification)
     
     db.commit()
-    return {"message": "Shift closed successfully"}
+    return {"message": "Shift closed successfully",
+            "shift_id":shift.id,
+            "opened_at":shift.opened_at,
+            "closed_at":shift.ended_at.isoformat(),
+            "status":shift.status}

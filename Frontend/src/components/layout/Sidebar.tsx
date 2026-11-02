@@ -14,6 +14,7 @@ export const Sidebar =({userName,userRole}:SidebarProps) =>{
     userName =user?.name
     userRole=user?.role
     const logout =useAuthStore((s)=>s.logout);
+    const storeName=localStorage.getItem("STORE_NAME")
 
 
     return(
@@ -24,7 +25,7 @@ export const Sidebar =({userName,userRole}:SidebarProps) =>{
             <Zap size={16} className="text-white" />
             </div>
             <div className="min-w-0">
-                <p className="text-sm font-bold leading-tight text-white truncate">{user?.storeName}</p>
+                <p className="text-sm font-bold leading-tight text-white truncate">{storeName}</p>
                 <p className="text-[10px] text-white/50 uppercase tracking-widest">Electrical & Hardware</p>
             </div>
          </div>

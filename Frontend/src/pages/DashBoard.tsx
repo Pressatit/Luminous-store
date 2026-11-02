@@ -20,6 +20,7 @@ const Backend = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
 
 
 import type { DashboardSummary, StockAlert, ActivityItem } from "../types/dashboard";
+import { useShift } from "@/context/shiftcontext";
 
 const today = () => {
   const d = new Date();
@@ -56,7 +57,11 @@ export const DashBoard = () => {
  const [isloading,setisloading]    =useState(true);
  const [error,setError]            =useState("")
  const [categorycount,setCategorycount]= useState<number>(0)
+ const storeName=localStorage.getItem("STORE_NAME")
 
+
+const {activeShift} =useShift();
+console.log("activeShift in dashboard:", activeShift);
 
   const [dateRange, setDateRange] = useState<DateRange>({
     from: yesterday(),
@@ -158,7 +163,6 @@ export const DashBoard = () => {
     in:activities.filter(a => a.transaction_type === 'Receive stock').length, 
     out: activities.filter(a => a.transaction_type === 'Dispatch Items').length },
   totalCategories: categorycount,
-  activeCashier: isCashier? user.name : '----',
 };
 
   
@@ -205,7 +209,7 @@ export const DashBoard = () => {
               <Zap size={14} className="text-white" />
             </div>
             <div>
-              <p className="text-xs font-bold text-[#1B2B4B] leading-none">{user?.storeName}</p>
+              <p className="text-xs font-bold text-[#1B2B4B] leading-none">{storeName}</p>
               <p className="text-[9px] text-gray-400 uppercase tracking-widest">Electrical & Hardware</p>
             </div>
           </div>
@@ -222,7 +226,7 @@ export const DashBoard = () => {
             {getLiveDate()} · <span className="font-semibold text-[#1B2B4B]">{time}</span>
           </p>
           <p className="text-xs text-gray-400 mt-0.5">
-            Active cashier: <span className="font-semibold text-[#1B2B4B]">{summary.activeCashier}</span>
+            Active cashier: <span className="font-semibold text-[#1B2B4B]">{activeShift?.cashier_name}</span>
           </p>
         </div>
 
@@ -254,7 +258,7 @@ export const DashBoard = () => {
           <div>
             <p className="text-xs text-gray-400 uppercase tracking-widest">{getLiveDate()}</p>
             <p className="text-gray-500 text-sm mt-0.5">
-              Active cashier: <span className="font-semibold text-[#1B2B4B]">{summary.activeCashier}</span>
+              Active cashier: <span className="font-semibold text-[#1B2B4B]">{activeShift?.cashier_name}</span>
             </p>
           </div>
 

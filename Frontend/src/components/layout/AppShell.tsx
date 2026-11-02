@@ -3,6 +3,7 @@ import { Sidebar }    from "./Sidebar";
 import { BottomDock } from "@/components/layout/Bottomdock";
 import { TopBar }     from "@/components/layout/Topbar";
 import { PageHeader } from "@/components/layout/Pageheader";
+import { ShiftGate } from "../shift/ShiftGate";
 
 const MOCK_USER = { name: "Kamau Njoroge", role: "admin" };
 
@@ -16,6 +17,7 @@ export const AppShell = () => {
   const isDashboard = pathname === "/";
 
   return (
+    <ShiftGate>
     <div className="min-h-screen bg-[#F8FAFC] font-sans">
 
       <Sidebar userName={MOCK_USER.name} userRole={MOCK_USER.role} />
@@ -35,7 +37,8 @@ export const AppShell = () => {
             !hideDock   ? "pb-[80px] md:pb-0"  : "pb-0",
           ].join(" ")}
         >
-          {isDashboard ? (
+          
+            {isDashboard ? (
             <div className="w-full px-4 py-4 md:px-8 md:py-6">
               <Outlet />
             </div>
@@ -44,10 +47,12 @@ export const AppShell = () => {
               <Outlet />
             </div>
           )}
+          
         </main>
       </div>
 
       {!hideDock && <BottomDock />}
     </div>
+    </ShiftGate>
   );
 };

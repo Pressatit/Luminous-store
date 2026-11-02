@@ -7,7 +7,7 @@ export interface DashboardSummary {
     out: number;
   };
   totalCategories: number;
-  activeCashier: string;
+
 }
 
 export interface StockAlert {

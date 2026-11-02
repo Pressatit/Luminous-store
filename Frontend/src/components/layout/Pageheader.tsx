@@ -13,6 +13,8 @@ export const PageHeader = () =>{
    const user = useAuthStore((s)=>(s.user));
    const userName=user?.name
    const userRole=user?.role
+   const storeName=localStorage.getItem("STORE_NAME")
+
 
    
 
@@ -26,7 +28,7 @@ export const PageHeader = () =>{
             </div>
             <div className="text-center">
                 <p className="text-l text-black-400 uppercase tracking-widest font-semibold mb-0.5">
-                    {user?.storeName} Electrical & Hardware 
+                    {storeName} Electrical & Hardware 
                 </p>
             </div>
             <div className="flex items-center justify-end gap-2">

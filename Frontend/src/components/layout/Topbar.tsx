@@ -8,6 +8,8 @@ import { useAuthStore } from "@/stores/authstore";
 export const TopBar =()=> {
     const { pathname } =useLocation();
     const user= useAuthStore((s)=>(s.user))
+    const storeName=localStorage.getItem("STORE_NAME")
+
 
     const current =NAV_ITEMS.find((n)=>
         pathname === "/" ? n.path === "/" : n.path !== "/" && pathname.startsWith(n.path)
@@ -22,7 +24,7 @@ export const TopBar =()=> {
                 </div>
                 <div className="text-center">
                      <p className="text-[15px] text-black-500 uppercase tracking-widest font-semibold">
-                        {user?.storeName} Electrical & Hardware
+                        {storeName} Electrical & Hardware
                      </p>
 
                 </div>
