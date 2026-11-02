@@ -23,7 +23,7 @@ origins=["https://luminous-store-gw0p8f3hn-pressatits-projects.vercel.app",
 # Enable CORS so your React frontend can communicate with this backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origins], # In production, replace with your React app's URL
+    allow_origins=origins, # In production, replace with your React app's URL
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
