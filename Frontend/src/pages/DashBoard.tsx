@@ -13,7 +13,8 @@ import { StatCard }      from "../components/dashboard/StatCard";
 import { StockAlertRow } from "../components/dashboard/StockAlertRow";
 import { ActivityRow }   from "../components/dashboard/ActivityRow";
 import { QuickActions }  from "../components/dashboard/QuickActions";
-import { useAuthStore } from "@/stores/authstore";
+import { StockHealthSkeleton, ActivitySkeleton } from "../components/dashboard/Skeleton";
+//import { useAuthStore } from "@/stores/authstore";
 
 
 const Backend = import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
@@ -34,7 +35,7 @@ const yesterday = () => {
 };
 
 
-const formatKsh = (n: number) => "Ksh " + n.toLocaleString("en-KE");
+//const formatKsh = (n: number) => "Ksh " + n.toLocaleString("en-KE");
 
 
 const getLiveTime = () =>
@@ -47,9 +48,9 @@ const getLiveDate = () =>
 
 export const DashBoard = () => {
   const navigate = useNavigate();
-  const user = useAuthStore((s) => s.user);
+  //const user = useAuthStore((s) => s.user);
 
-  const isCashier=user?.role =='cashier'
+  //const isCashier=user?.role =='cashier'
 
 
  const [activities, setActivities] =useState<ActivityItem[]>([])
@@ -63,7 +64,7 @@ export const DashBoard = () => {
 const {activeShift} =useShift();
 console.log("activeShift in dashboard:", activeShift);
 
-  const [dateRange, setDateRange] = useState<DateRange>({
+  const [dateRange ] = useState<DateRange>({
     from: yesterday(),
     to:   today(),
   });
@@ -114,6 +115,7 @@ console.log("activeShift in dashboard:", activeShift);
     setStock(data)
   }
   catch(err){
+    console.error(err)
     setError("Could not load activity. Check your connection.");
     toast.error(error)
   }
@@ -140,10 +142,10 @@ console.log("activeShift in dashboard:", activeShift);
 
     }
   }
+
   const loadAllData = async () => {
       setisloading(true);
       setError("");
-      
       
       await Promise.all([
         fetchStockAlert(),
@@ -186,17 +188,27 @@ console.log("activeShift in dashboard:", activeShift);
     </div>
   );
 
-  const stockHealth = (
+  const stocked = (
     <div className="space-y-2">
       {alerts.map((a) => <StockAlertRow key={a.id} alert={a} />)}
     </div>
   );
 
-  const recentActivity = (
+  const Activity = (
     <div className="divide-y divide-gray-100">
       {activity.map((a) => <ActivityRow key={a.id} item={a} />)}
     </div>
   );
+
+  const stockHealth = isloading ? (
+              <StockHealthSkeleton />
+            ) : alerts.length === 0 ? (
+              <p className="text-sm text-gray-400 py-6 text-center">Stock is Healthy</p>
+            ) : stocked;
+
+  const recentActivity=isloading ? (<ActivitySkeleton/> )
+         : activity.length === 0 ? (<p className="text-sm text-gray-400 py-6 text-center">No activity today yet ...</p>) 
+         : Activity
 
   return (
     <>
@@ -280,7 +292,7 @@ console.log("activeShift in dashboard:", activeShift);
         <div className="grid grid-cols-2 gap-6 mb-6">
           <div className="bg-white rounded-2xl p-5 border border-gray-100">
             <p className="text-sm font-bold text-[#1B2B4B] mb-3">Stock Health</p>
-            {stockHealth}
+          {stockHealth}
           </div>
           <div className="bg-white rounded-2xl p-5 border border-gray-100">
             <p className="text-sm font-bold text-[#1B2B4B] mb-2">Recent Activity</p>

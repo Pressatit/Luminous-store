@@ -204,7 +204,7 @@ export const ReportPage = () => {
             <>
               {/* ── MOBILE: card list ── */}
               <div className="md:hidden space-y-3">
-                {rows.map((row, idx) => (
+                {rows.map((row) => (
                   <div key={row.id}
                     className="bg-white border border-gray-100 rounded-2xl px-4 py-3 space-y-2">
                     <div className="flex items-start justify-between">

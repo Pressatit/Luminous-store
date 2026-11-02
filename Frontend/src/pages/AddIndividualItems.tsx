@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from "react";
+import { useState, useRef } from "react";
 import { useNavigate,useLocation } from "react-router-dom";
 import { ArrowLeft, Search, ScanBarcode, X } from "lucide-react";
 //import { useBarcodeScanner } from "../hooks/useBarcodeScanner";
@@ -45,10 +45,11 @@ catch (error) {
 };
 
 // ── Mock barcode lookup — replace with GET /items?barcode={code}
-const mockBarcodeLookup = async (code: string): Promise<ItemSearchResult | null> => {
+{/*const mockBarcodeLookup = async (code: string): Promise<ItemSearchResult | null> => {
   await new Promise((r) => setTimeout(r, 300));
   return { id: 1, name: "Bulb holders E27", barcode: code, category: "Electricals", quantity: 45 };
 };
+*/}
 
 export const AddIndividualItemPage = () => {
   const navigate = useNavigate();
@@ -70,7 +71,7 @@ export const AddIndividualItemPage = () => {
   const [unitPrice,       setUnitPrice]       = useState("");
   const [quantityToAdd,   setQuantityToAdd]   = useState("");
   const [isScanMode,      setIsScanMode]      = useState(false);
-  const [isLookingUp,     setIsLookingUp]     = useState(false);
+  const [isLookingUp,  ]     = useState(false);
 
   // ── Live search with debounce ─────────────────────────────
   const handleSearchChange = (value: string) => {
@@ -112,7 +113,7 @@ export const AddIndividualItemPage = () => {
   };
 
   // ── Barcode scanner fallback ──────────────────────────────
-  const handleScan = useCallback(async (code: string) => {
+  {/*const handleScan = useCallback(async (code: string) => {
     setIsLookingUp(true);
     setIsScanMode(true);
     try {
@@ -124,7 +125,7 @@ export const AddIndividualItemPage = () => {
     } finally {
       setIsLookingUp(false);
     }
-  }, []);
+  }, []);*/}
 
   //useBarcodeScanner(handleScan);
 

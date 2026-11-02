@@ -1,5 +1,5 @@
 // ── pages/ReceiveStockPage.tsx ───────────────────────────────
-import { useState, useEffect, useCallback,useRef } from "react";
+import { useState, useEffect,useRef } from "react";
 import { useNavigate, useLocation }         from "react-router-dom";
 import { Plus, Trash2, ScanBarcode, PackagePlus ,Search,X} from "lucide-react";
 //import { useBarcodeScanner } from "../hooks/useBarcodeScanner";
@@ -54,16 +54,17 @@ interface InlineFormProps {
 }
 
 const InlineAddForm = ({ onAdd }: InlineFormProps) => {
-  const [barcode,         setBarcode]         = useState("");
-  const [itemName,        setItemName]        = useState("");
+  // const [barcode,         setBarcode]         = useState("");
+  const [  itemName   ,   setItemName]        = useState("");
   const [unitPrice,       setUnitPrice]       = useState("");
   const [unitCost,        setUnitCost]        = useState("");
-  const [quantityInStock, setQuantityInStock] = useState("");
+  const [ QuantityInStock ,setQuantityInStock] = useState("");
   const [quantityToAdd,   setQuantityToAdd]   = useState("");
   
 
 
-  const [isLooking,       setIsLooking]       = useState(false);
+  
+  const [isLooking, ]       = useState(false);
   
   const [selectedItem,    setSelectedItem]    = useState<ItemSearchResult | null>(null);
   const [isScanMode,      setIsScanMode]      = useState(false);
@@ -74,10 +75,11 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
   const [showDropdown,  setShowDropdown]  = useState(false);
   const searchTimer                       = useRef<ReturnType<typeof setTimeout>>(undefined);
  
-  const mockBarcodeLookup = async (code: string): Promise<ItemSearchResult | null> => {
+  
+  {/*const mockBarcodeLookup = async (code: string): Promise<ItemSearchResult | null> => {
   await new Promise((r) => setTimeout(r, 300));
   return { id: 1, name: "Bulb holders E27", barcode: code, category: "Electricals", quantity: 45 };
- };
+ };*/}
 
   const handleSearchChange = (value: string) => {
       setSearchQuery(value);
@@ -118,7 +120,7 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
     };
   
     // ── Barcode scanner fallback ──────────────────────────────
-    const handleScan = useCallback(async (code: string) => {
+    {/*const handleScan = useCallback(async (code: string) => {
       setIsLooking(true);
       setIsScanMode(true);
       try {
@@ -133,7 +135,7 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
     }, []);
   
     //useBarcodeScanner(handleScan);
-  
+  */}
     // ── Add to cart ───────────────────────────────────────────
     const canAdd = selectedItem && quantityToAdd && unitCost && unitPrice;
   
@@ -142,6 +144,9 @@ const InlineAddForm = ({ onAdd }: InlineFormProps) => {
       const qty   = Number(quantityToAdd);
       const price = Number(unitPrice);
       const cost  = Number(unitCost);
+      console.log(itemName)
+      console.log(QuantityInStock)
+
      onAdd({
         id:        selectedItem.id,
         itemName:  selectedItem.name,

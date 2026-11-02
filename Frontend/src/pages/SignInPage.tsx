@@ -37,6 +37,7 @@ export const SignInPage = () => {
     e.preventDefault();
     setErrorMsg('')
     setIsLoading(true);
+  
 
     const token=getDeviceToken();
   
@@ -49,6 +50,7 @@ export const SignInPage = () => {
       })
 
       const data = await response.json()
+      console.log(focusedInput)
 
       if (!response.ok) {
 
@@ -85,6 +87,7 @@ export const SignInPage = () => {
 
     } catch (err: any) {
       setErrorMsg(err.message)
+      toast.error(errorMsg)
     } finally {
       setIsLoading(false)
     }
@@ -182,6 +185,7 @@ export const SignInPage = () => {
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}
                 className="relative flex items-center rounded-lg overflow-hidden"
               >
+                
                 <Mail size={15} className={`absolute left-3 transition-colors duration-200 text-[#0EA5A0]`} />
                 <input
                   type="email"
@@ -197,6 +201,7 @@ export const SignInPage = () => {
               </motion.div>
 
               {/* Password */}
+              
               <motion.div
                 whileHover={{ scale: 1.01 }}
                 transition={{ type: "spring", stiffness: 400, damping: 25 }}

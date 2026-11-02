@@ -20,7 +20,7 @@ export const ItemCard = ({ item }: ItemCardProps) => {
   // Stock status logic — ties directly to our reorder_level field
   const isCritical = item.quantity === 0;
   const isLow      = item.quantity > 0 && item.quantity <= item.reorder_level;
-  const isHealthy  = item.quantity > item.reorder_level;
+  //const isHealthy  = item.quantity > item.reorder_level;
 
   const statusLabel = isCritical ? "Out of stock" : isLow ? "Stock low" : "In stock";
   const statusColor = isCritical

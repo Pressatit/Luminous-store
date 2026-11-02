@@ -84,6 +84,7 @@ export const SignUpPage = () => {
 
     } catch (err: any) {
       setErrorMsg(err.message)
+      toast.error(errorMsg)
     } finally {
       setIsLoading(false)
     }
